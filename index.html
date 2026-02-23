@@ -120,6 +120,34 @@
         }
         render();
     </script>
+
+    <script>
+        function filterTab(tab) {
+            currentTab = tab;
+            ["all", "interview", "rejected"].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                if (t === tab) {
+                    el.classList.add("bg-blue-500", "text-white");
+                    el.classList.remove("bg-white", "text-slate-700");
+                } else {
+                    el.classList.remove("bg-blue-500", "text-white");
+                    el.classList.add("bg-white", "text-slate-700");
+                }
+            });
+            render();
+        }
+
+        function updateStatus(id, newStatus) {
+            const job = jobs.find(j => j.id === id);
+            job.status = newStatus;
+            render();
+        }
+
+        function deleteJob(id) {
+            jobs = jobs.filter(j => j.id !== id);
+            render();
+        }
+    </script>
 </body>
 
 </html>
