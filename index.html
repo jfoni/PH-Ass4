@@ -59,6 +59,67 @@
         <div id="job-container" class="space-y-4"></div>
 
     </main>
+
+    <script>
+        let jobs = [
+            { id: 1, company: "Mobile First Corp", role: "React Native Developer", loc: "Remote", type: "Full-time", salary: "$130k - $175k", desc: "Build cross-platform mobile apps using React Native.", status: "not-applied" },
+            { id: 2, company: "WebFlow Agency", role: "Web Designer", loc: "Los Angeles, CA", type: "Part-time", salary: "$80k - $120k", desc: "Create stunning web experiences for clients.", status: "not-applied" },
+            { id: 3, company: "DataViz Solutions", role: "Data Visualization Specialist", loc: "Boston, MA", type: "Full-time", salary: "$125k - $165k", desc: "Turn complex data into beautiful charts.", status: "not-applied" },
+            { id: 4, company: "CloudFirst Inc", role: "Backend Developer", loc: "Seattle, WA", type: "Full-time", salary: "$140k - $190k", desc: "Design scalable backend systems.", status: "not-applied" },
+            { id: 5, company: "Innovation Labs", role: "UI/UX Engineer", loc: "Austin, TX", type: "Full-time", salary: "$110k - $150k", desc: "Build user-friendly interfaces.", status: "not-applied" },
+            { id: 6, company: "MegaCorp Solutions", role: "JavaScript Developer", loc: "New York, NY", type: "Contract", salary: "$90k - $140k", desc: "Develop enterprise web apps.", status: "not-applied" },
+            { id: 7, company: "Cyber Shield", role: "Security Engineer", loc: "Remote", type: "Full-time", salary: "$150k - $200k", desc: "Secure infrastructure.", status: "not-applied" },
+            { id: 8, company: "AppMakers", role: "iOS Developer", loc: "San Francisco, CA", type: "Full-time", salary: "$140k - $180k", desc: "Lead iOS development.", status: "not-applied" }
+        ];
+
+        let currentTab = "all";
+
+        function render() {
+            const container = document.getElementById("job-container");
+            const filtered = jobs.filter(j => currentTab === "all" ? true : j.status === currentTab);
+
+            document.getElementById("total-count").innerText = jobs.length;
+            document.getElementById("interview-count").innerText = jobs.filter(j => j.status === "interview").length;
+            document.getElementById("rejected-count").innerText = jobs.filter(j => j.status === "rejected").length;
+
+            document.getElementById("section-count").innerText = currentTab === "all" ? `${filtered.length} jobs` : `${filtered.length} of ${jobs.length} jobs`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="flex flex-col items-center justify-center py-16 bg-white rounded-xl border-2 border-dashed">
+<img src="jobs.png" class="w-32 sm:w-40 mb-4">
+<h3 class="text-lg sm:text-xl font-bold text-slate-600" style="color:#002C5C;">No jobs available</h3>
+<p class="text-slate-400 text-sm sm:text-base">Check back soon for new job opportunities</p>
+</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(job => {
+                let badgeStyle = "bg-[#EEF4FF] text-[#002C5C]";
+                let badgeText = "NOT APPLIED";
+                if (job.status === "interview") { badgeStyle = "bg-emerald-100 text-emerald-700"; badgeText = "INTERVIEW"; }
+                if (job.status === "rejected") { badgeStyle = "bg-rose-100 text-rose-700"; badgeText = "REJECTED"; }
+
+                return `<div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm border relative">
+<button onclick="deleteJob(${job.id})" class="absolute top-3 sm:top-4 right-3 sm:right-4 text-slate-300 hover:text-rose-500"><i class="fa-solid fa-trash-can"></i></button>
+<div class="mb-3 sm:mb-4">
+<h4 class="text-base sm:text-lg font-bold" style="color:#002C5C;">${job.company}</h4>
+<p class="font-medium text-sm sm:text-base" style="color:#002C5C;">${job.role}</p>
+</div>
+<div class="flex flex-wrap gap-x-4 gap-y-1 text-xs sm:text-sm mb-2" style="color:#002C5C;">
+<span><i class="fa-solid fa-location-dot mr-1 sm:mr-2"></i>${job.loc}</span>
+<span><i class="fa-solid fa-clock mr-1 sm:mr-2"></i>${job.type}</span>
+<span><i class="fa-solid fa-circle-dollar-to-slot mr-1 sm:mr-2"></i>${job.salary}</span>
+</div>
+<div class="inline-block mb-3 sm:mb-4 px-2 sm:px-3 py-1 sm:py-2 rounded font-bold text-[10px] sm:text-[12px] uppercase tracking-wide ${badgeStyle}">${badgeText}</div>
+<p class="text-slate-600 text-xs sm:text-sm mb-4 sm:mb-6">${job.desc}</p>
+<div class="flex flex-wrap gap-2 sm:gap-3">
+<button onclick="updateStatus(${job.id},'interview')" class="px-4 sm:px-6 py-2 rounded-lg border-2 border-emerald-500 text-emerald-600 font-bold ${job.status === 'interview' ? 'bg-emerald-500 text-white' : ''}">INTERVIEW</button>
+<button onclick="updateStatus(${job.id},'rejected')" class="px-4 sm:px-6 py-2 rounded-lg border-2 border-rose-500 text-rose-600 font-bold ${job.status === 'rejected' ? 'bg-rose-500 text-white' : ''}">REJECTED</button>
+</div></div>`;
+            }).join("");
+        }
+        render();
+    </script>
 </body>
 
 </html>
